@@ -2,6 +2,7 @@
 /// <reference lib="esnext" />
 /// <reference lib="dom" />
 import "https://esm.sh/re_expand@0.2.0";
+import { hash } from "./hash.ts";
 
 let suggests = [];
 for (let i = 0; i < 100; i++) {
@@ -23,11 +24,6 @@ const status = $("<div>")
   .css("background-color", "#ffd")
   .appendTo($("body"))
   .hide();
-
-function hash(str) { // 文字列を0〜255の値に
-  const md5 = crypto.createHash("md5");
-  return parseInt(md5.update(str).digest("hex").substring(0, 4), 16) % 100;
-}
 
 function terminate_def(cmd) {
   const h = hash(cmd);

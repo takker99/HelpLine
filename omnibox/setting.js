@@ -1,11 +1,7 @@
 //
 // HelpLineの設定画面でデータを扱う
 //
-
-function hash(str) { // 文字列を0〜99のハッシュに変換
-  const md5 = crypto.createHash("md5");
-  return parseInt(md5.update(str).digest("hex").substring(0, 4), 16) % 100;
-}
+import { hash } from "./hash.ts";
 
 //
 // chrome.storage のデータをローカルファイルにセーブ
