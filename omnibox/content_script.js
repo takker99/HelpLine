@@ -13,8 +13,6 @@ for (let i = 0; i < 100; i++) {
   suggestnames[i] = `suggests${i}`;
 }
 
-let descs = [];
-
 const status = $("<div>")
   .css("position", "absolute")
   .css("width", "100%")
@@ -78,7 +76,7 @@ function register_page() {
 
 /** Scrapboxページの内容を1行ずつ調べてHelpfeel記法を処理する */
 function process(lines, project, ask) {
-  descs = []; // Helpfeel記法
+  let descs = []; // Helpfeel記法
   const title = lines[0].text;
   let found = false;
   for (const entry of lines) {
@@ -132,33 +130,31 @@ chrome.runtime.onMessage.addListener((message) => {
     if (ms && ms[1]) {
       const project = ms[1];
       const title = ms[3];
-      if (!title) { // ページリスト
-        fetch(`https://scrapbox.io/api/pages/${project}?limit=1000`)
-          .then(function (response) {
-            return response.json();
-          })
-          .then(function (json) {
-            for (const page of json.pages) {
-              const title = page.title;
-              console.log(title);
-              fetch(`https://scrapbox.io/api/pages/${project}/${title}`)
-                .then(function (response) {
-                  return response.json();
-                })
-                .then(function (json) {
-                  process(json.lines, project, false);
-                });
-            }
-          });
-      } else { // 単独ページ
-        fetch(`https://scrapbox.io/api/pages/${project}/${title}`)
-          .then(function (response) {
-            return response.json();
-          })
-          .then(function (json) {
-            process(json.lines, project, true);
-          });
-      }
+      (async () => {
+        if (!title) { // ページリスト
+          const response = await fetch(
+            `https://scrapbox.io/api/pages/${project}?limit=1000`,
+          );
+          const json = await response.json();
+          for (const page of json.pages) {
+            const title = page.title;
+            console.log(title);
+            (async () => {
+              const response = await fetch(
+                `https://scrapbox.io/api/pages/${project}/${title}`,
+              );
+              const json = await response.json();
+              process(json.lines, project, false);
+            })();
+          }
+        } else { // 単独ページ
+          const response = await fetch(
+            `https://scrapbox.io/api/pages/${project}/${title}`,
+          );
+          const json = await response.json();
+          process(json.lines, project, true);
+        }
+      })();
     } else if (mg && mg[1]) { // GyazoページにHelpfeel記述があれば登録
       gyazoid = mg[1];
       // lines = $('.image-desc-display').text().split(/\n/)
