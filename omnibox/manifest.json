@@ -12,7 +12,7 @@
       "matches": ["<all_urls>"],
       "js": [
         "jquery-2.1.4.min.js",
-        "content_scripts.min.js"
+        "content_script.min.js"
       ],
       "run_at": "document_idle"
     }
