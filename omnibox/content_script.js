@@ -23,6 +23,7 @@ const status = $("<div>")
   .appendTo($("body"))
   .hide();
 
+let descs = [];
 function terminate_def(cmd) {
   const h = hash(cmd);
   if (descs.length > 0) {
@@ -76,7 +77,7 @@ function register_page() {
 
 /** Scrapboxページの内容を1行ずつ調べてHelpfeel記法を処理する */
 function process(lines, project, ask) {
-  let descs = []; // Helpfeel記法
+  descs = []; // Helpfeel記法
   const title = lines[0].text;
   let found = false;
   for (const entry of lines) {
