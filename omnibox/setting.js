@@ -3,9 +3,7 @@
 //
 import { hash } from "./hash.ts";
 
-//
-// chrome.storage のデータをローカルファイルにセーブ
-//
+/** chrome.storage のデータをローカルファイルにセーブ */
 function save() {
   chrome.storage.local.get(null, function (items) { // nullだと全データ読み込み
     const data = {};
@@ -26,9 +24,7 @@ function save() {
   });
 }
 
-//
-// ローカルファイルからデータを読出して chrome.storage にデータを足す
-//
+/** ローカルファイルからデータを読出して chrome.storage にデータを足す */
 function handleFileSelect(evt) {
   const f = evt.target.files[0];
   const reader = new FileReader();
@@ -70,9 +66,7 @@ function handleFileSelect(evt) {
   reader.readAsText(f);
 }
 
-//
-// chrome.storage のデータ消去
-//
+/** chrome.storage のデータ消去 */
 function clear() {
   chrome.storage.local.clear();
 }

@@ -76,10 +76,8 @@ function register_page() {
   }
 }
 
+/** Scrapboxページの内容を1行ずつ調べてHelpfeel記法を処理する */
 function process(lines, project, ask) {
-  //
-  // Scrapboxページの内容を1行ずつ調べてHelpfeel記法を処理する
-  //
   descs = []; // Helpfeel記法
   const title = lines[0].text;
   let found = false;
