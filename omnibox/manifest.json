@@ -1,42 +1,42 @@
 {
-    "name": "HelpLine",
-    "description" : "'/ ' をomniboxに入力してHelpfeel検索する",
-    "version": "1.13",
-    "manifest_version": 2,
-    "permissions": [
-	"storage",
-	"downloads"
+  "name": "HelpLine",
+  "description": "'/ ' をomniboxに入力してHelpfeel検索する",
+  "version": "1.13",
+  "manifest_version": 2,
+  "permissions": [
+    "storage",
+    "downloads"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "jquery-2.1.4.min.js",
+        "content_scripts.min.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "scripts": [
+      "background.min.js"
     ],
-    "content_scripts": [
-	{
-	    "matches": ["<all_urls>"],
-	    "js": [
-		"jquery-2.1.4.min.js",
-		"content_script_browserify.js"
-	    ],
-	    "run_at": "document_idle"
-	}
-    ],
-    "background": {
-	"scripts": [
-	    "background_browserify.js"
-	],
-	"persistent": false
+    "persistent": false
+  },
+  "omnibox": { "keyword": "/" },
+  "browser_action": {
+    "default_icon": {
+      "16": "helpline-16.png"
     },
-    "omnibox": { "keyword" : "/" },
-    "browser_action": {
-	"default_icon": {
-	    "16": "helpline-16.png"
-	},
-	"default_title": "Helpfeel登録"
-    },
-    "icons": {
-	"16": "helpline-16.png",
-	"32": "helpline-32.png",
-	"48": "helpline-48.png",
-	"96": "helpline-96.png",
-	"128": "helpline-128.png",
-	"192": "helpline-192.png"
-    },
-    "options_page": "setting.html"
+    "default_title": "Helpfeel登録"
+  },
+  "icons": {
+    "16": "helpline-16.png",
+    "32": "helpline-32.png",
+    "48": "helpline-48.png",
+    "96": "helpline-96.png",
+    "128": "helpline-128.png",
+    "192": "helpline-192.png"
+  },
+  "options_page": "setting.html"
 }
