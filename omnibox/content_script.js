@@ -1,7 +1,9 @@
-require("re_expand"); // browserifyで展開
-const crypto = require("crypto");
+/// <reference no-default-lib="true" />
+/// <reference lib="esnext" />
+/// <reference lib="dom" />
+import "https://esm.sh/re_expand@0.2.0";
 
-const suggests = [];
+let suggests = [];
 for (let i = 0; i < 100; i++) {
   suggests[i] = {};
 }
@@ -10,7 +12,7 @@ for (let i = 0; i < 100; i++) {
   suggestnames[i] = `suggests${i}`;
 }
 
-const descs = [];
+let descs = [];
 
 const status = $("<div>")
   .css("position", "absolute")
@@ -125,7 +127,7 @@ chrome.runtime.onMessage.addListener((message) => {
   status.show();
 
   chrome.storage.local.get(suggestnames, function (value) {
-    for (const i = 0; i < 100; i++) {
+    for (let i = 0; i < 100; i++) {
       if (value[`suggests${i}`]) {
         suggests[i] = value[`suggests${i}`];
       }
