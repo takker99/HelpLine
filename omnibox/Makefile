@@ -1,7 +1,7 @@
 js:
-	browserify content_script.js -o content_script_browserify.js
-	browserify setting.js -o setting_browserify.js
-	browserify background.js -o background_browserify.js
+	deno bundle content_script.js | deno run --allow-net=registry.npmjs.org --allow-read --allow-write=$HOME/.cache/esbuild --allow-run --allow-env --no-check https://deno.land/x/esbuild@v0.14.11/mod.js --minify > content_script.min.js
+	deno bundle background.js | deno run --allow-net=registry.npmjs.org --allow-read --allow-write=$HOME/.cache/esbuild --allow-run --allow-env --no-check https://deno.land/x/esbuild@v0.14.11/mod.js --minify > background.min.js
+	deno bundle setting.js | deno run --allow-net=registry.npmjs.org --allow-read --allow-write=$HOME/.cache/esbuild --allow-run --allow-env --no-check https://deno.land/x/esbuild@v0.14.11/mod.js --minify > setting.min.js
 
 
 #
@@ -10,9 +10,9 @@ js:
 
 ZIPFILES=\
 	manifest.json \
-	background_browserify.js \
-	content_script_browserify.js \
-	setting_browserify.js \
+	background.min.js \
+	content_script.min.js \
+	setting.min.js \
 	setting.html \
 	jquery-2.1.4.min.js \
 	helpline-16.png \
@@ -22,13 +22,20 @@ ZIPFILES=\
 	helpline-128.png \
 	helpline-192.png
 
+MINIFIED_FILES=\
+	background.min.js \
+	content_script.min.js \
+	setting.min.js \
+
 zip: js
 	/bin/rm -f helpline.zip
 	zip -r helpline.zip ${ZIPFILES}
+	/bin/rm ${MINIFIED_FILES}
+
 
 # all:
-# 	cd ..; make all
-# 
+#		cd ..; make all
+#
 # # suggests.jsにヘルプデータを書いておくバージョン
 # conv:
-# 	ruby conv.rb > suggests.js
+#		ruby conv.rb > suggests.js
