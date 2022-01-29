@@ -42,6 +42,7 @@ async function register_page(): Promise<Suggest | undefined> {
 function* process(
   lines: string[],
   project: string,
+  glossary?: Map<string, string>,
 ): Generator<Suggest, void, void> {
   let descriptions = [] as string[]; // Helpfeel記法
   const title = lines[0];
@@ -52,7 +53,13 @@ function* process(
     for (const node of block.nodes) {
       switch (node.type) {
         case "helpfeel": {
-          descriptions.push(node.text);
+          const help = glossary
+            ? node.text.replace(
+              /{(\w+)}/g,
+              (_, p1: string) => glossary.get(p1) ?? `{${p1}}`,
+            )
+            : node.text;
+          descriptions.push(help);
           break;
         }
         case "commandLine": {
@@ -84,6 +91,18 @@ function* process(
   }
 }
 
+async function getGlossary(project: string): Promise<Map<string, string>> {
+  const text = await getPage(project, "glossary");
+  const entries: [string, string][] = text.split("\n").flatMap((line) => {
+    const matches = line.match(/^(\w+):(?:`([^`]+)`|(.+))$/);
+    if (!matches) return [];
+    const word = matches[1];
+    const definition = matches[2] ?? matches[3];
+    return [[word, definition]];
+  });
+  return new Map(entries);
+}
+
 async function register() {
   const ms = location.href.match(/scrapbox\.io\/([a-zA-Z0-9\-]+)(\/(.*))?$/);
   const mg = location.href.match(/gyazo\.com\/([0-9a-f]{32})/i);
@@ -91,10 +110,12 @@ async function register() {
     // scrapbox.ioにいるとき
     const project = ms[1];
     const encodedTitle = ms[3];
+    const glossary = await getGlossary(project);
     if (!encodedTitle) { // ページリスト
       let titles = [] as string[];
       let total = 0;
       let now = 0;
+
       const flush = async () => {
         await Promise.all(titles.map(async (title) => {
           console.log(title);
@@ -105,6 +126,7 @@ async function register() {
               const suggest of process(
                 text.split("\n"),
                 project,
+                glossary,
               )
             ) {
               status.textContent = decodeURIComponent(
@@ -117,6 +139,7 @@ async function register() {
         }));
         titles = [];
       };
+
       for await (const { count, pages } of getPages(project)) {
         total = count;
         for (const page of pages) {
@@ -127,11 +150,13 @@ async function register() {
         }
       }
       await flush();
+
+      //
       return;
     }
     // 単独ページ
     const text = await getPage(project, decodeURIComponent(encodedTitle));
-    const suggests = [...process(text.split("\n"), project)];
+    const suggests = [...process(text.split("\n"), project, glossary)];
     if (suggests.length > 0) {
       await setData(suggests);
       return;
