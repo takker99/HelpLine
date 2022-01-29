@@ -12,10 +12,10 @@ import { getData, setData } from "./storage.ts";
 async function save() {
   const items = await getData(null);
 
-  const data = [] as [string, string][];
+  const data = {} as Record<string, string>;
   for (const [command, descriptions] of Object.entries(items)) {
     for (const description of descriptions) {
-      data.push([description, command]);
+      data[description] = command;
     }
   }
   const result = JSON.stringify(data);
