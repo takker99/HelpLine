@@ -182,5 +182,6 @@ browser.runtime.onMessage.addListener(async (message) => {
   status.textContent = "";
   status.hidden = false;
   await register();
+  status.textContent = "Successfully loaded.";
   setTimeout(() => status.hidden = true, 10000);
 });
