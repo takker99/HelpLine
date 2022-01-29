@@ -55,14 +55,22 @@ function search(
   ];
   const { match } = Asearch(` ${text} `);
   for (const [command, descriptions] of Object.entries(suggests)) {
-    for (const description of descriptions) {
+    // 同じコマンドへのヘルプは、検索文字列に一番マッチするものを1つだけ出す
+    const distances = descriptions.map((description) => {
       const result = match(description);
-      if (!result.found) continue;
-      matches[result.distance].push([description, command]);
-    }
+      if (!result.found) return 4 as 0 | 1 | 2 | 3 | 4;
+      return result.distance;
+    });
+    const minDistance = Math.min(...distances) as 0 | 1 | 2 | 3 | 4;
+    if (minDistance === 4) continue;
+
+    matches[minDistance].push([
+      descriptions[distances.indexOf(minDistance)],
+      command,
+    ]);
     if (matches[0].length >= limit) break;
   }
-  return matches.flat().map(([description, content]) => ({
+  return matches.flat().slice(0, limit).map(([description, content]) => ({
     description,
     content,
   }));
