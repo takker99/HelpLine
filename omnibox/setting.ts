@@ -52,9 +52,9 @@ async function handleFileSelect(evt: { target: HTMLInputElement }) {
     reader.readAsText(file);
   });
 
-  const data = JSON.parse(text) as [string, string][];
+  const data = JSON.parse(text) as Record<string, string>;
   await setData(
-    data.map(([description, command]) => ({
+    [...Object.entries(data)].map(([description, command]) => ({
       descriptions: [description],
       command,
     })),
