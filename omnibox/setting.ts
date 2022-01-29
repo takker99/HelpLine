@@ -19,9 +19,9 @@ async function save() {
     }
   }
   const result = JSON.stringify(data);
-  const url = `data:application/json;base64,${
-    btoa(unescape(encodeURIComponent(result)))
-  }`;
+  const url = URL.createObjectURL(
+    new Blob([result], { type: "application/json" }),
+  );
   await browser.downloads.download({
     url: url,
     filename: "helpfeel.json",
