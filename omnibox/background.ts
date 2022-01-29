@@ -11,7 +11,7 @@
 /// <reference lib="esnext" />
 /// <reference lib="dom" />
 
-import { Generator } from "./deps/re_expand.js";
+import { Asearch } from "https://raw.githubusercontent.com/takker99/deno-asearch/0.2.1/mod.ts";
 import { browser } from "./deps/webextension.ts";
 import { ensureTabId } from "./utils.ts";
 import { getData } from "./storage.ts";
@@ -46,32 +46,26 @@ function search(
   text: string,
   suggests: Record<string, [string, ...string[]]>,
   limit = 10,
-) {
-  const results = [] as browser.Omnibox.SuggestResult[];
+): browser.Omnibox.SuggestResult[] {
+  const matches = [[], [], [], []] as [
+    [string, string][],
+    [string, string][],
+    [string, string][],
+    [string, string][],
+  ];
+  const { match } = Asearch(` ${text} `);
   for (const [command, descriptions] of Object.entries(suggests)) {
-    for (
-      const generator of descriptions.map((description) =>
-        new Generator(description)
-      )
-    ) {
-      try {
-        const descs = generator.filter(` ${text} `).flatMap((pairs) =>
-          pairs.map(([desc]) => desc)
-        );
-        if (descs.length > 0) {
-          results.push(
-            ...descs.map((description) => ({ description, content: command })),
-          );
-          // 候補を表示 数を制限しないと候補が出ないようだ
-          if (results.length >= limit) return results.slice(0, limit);
-        }
-      } catch (e: unknown) {
-        // TypeErrorがGeneratorで発生したら飛ばす
-        if (!(e instanceof TypeError)) throw e;
-      }
+    for (const description of descriptions) {
+      const result = match(description);
+      if (!result.found) continue;
+      matches[result.distance].push([description, command]);
     }
+    if (matches[0].length >= limit) break;
   }
-  return results.slice(0, limit);
+  return matches.flat().map(([description, content]) => ({
+    description,
+    content,
+  }));
 }
 
 //

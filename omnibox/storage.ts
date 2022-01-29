@@ -3,6 +3,7 @@
 /// <reference lib="dom" />
 
 import { browser } from "./deps/webextension.ts";
+import { Generator } from "./deps/re_expand.js";
 
 export interface Suggest {
   descriptions: [string, ...string[]];
@@ -14,7 +15,9 @@ export async function setData(suggests: Iterable<Suggest>) {
   for (const { command, descriptions } of suggests) {
     items[command] = [
       ...(items[command] ?? []),
-      ...descriptions.map((description) => description.replace(/[\[\]]/g, "")),
+      ...descriptions.flatMap((description) =>
+        expand(description.replace(/[\[\]]/g, ""))
+      ),
     ];
   }
 
@@ -35,4 +38,22 @@ export async function getData(
 ) {
   const values = await browser.storage.local.get(commands);
   return values as Record<string, [string, ...string[]]>;
+}
+
+function expand(pattern: string) {
+  const generator = new Generator(pattern);
+  try {
+    // " "はワイルドカード
+    return [
+      ...new Set(
+        generator.filter(" ").flatMap((pairs) =>
+          pairs.map(([expanded]) => expanded)
+        ),
+      ),
+    ];
+  } catch (e: unknown) {
+    // TypeErrorがでたpatternは無視する
+    if (e instanceof TypeError) return [];
+    throw e;
+  }
 }
