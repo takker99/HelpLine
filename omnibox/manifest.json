@@ -37,5 +37,13 @@
     "128": "helpline-128.png",
     "192": "helpline-192.png"
   },
-  "options_page": "setting.html"
+  "options_ui": {
+    "page": "setting.html",
+    "open_in_tab": true
+  },
+  "applications": {
+    "gecko": {
+      "id": "addon@example.com"
+    }
+  }
 }
