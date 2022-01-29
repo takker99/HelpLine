@@ -11,7 +11,7 @@
 /// <reference lib="esnext" />
 /// <reference lib="dom" />
 
-import { Asearch } from "https://raw.githubusercontent.com/takker99/deno-asearch/0.2.1/mod.ts";
+import { Asearch } from "./deps/asearch.ts";
 import { browser } from "./deps/webextension.ts";
 import { ensureTabId } from "./utils.ts";
 import { getData } from "./storage.ts";
