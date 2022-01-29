@@ -40,10 +40,5 @@
   "options_ui": {
     "page": "setting.html",
     "open_in_tab": true
-  },
-  "applications": {
-    "gecko": {
-      "id": "addon@example.com"
-    }
   }
 }
