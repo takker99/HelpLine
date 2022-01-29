@@ -16,7 +16,9 @@ export async function setData(suggests: Iterable<Suggest>) {
     items[command] = [
       ...(items[command] ?? []),
       ...descriptions.flatMap((description) =>
-        expand(description.replace(/[\[\]]/g, ""))
+        expand(description.replace(/[\[\]]/g, "")).filter((description) =>
+          description !== ""
+        )
       ),
     ];
   }
