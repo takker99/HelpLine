@@ -85,10 +85,10 @@ browser.omnibox.onInputEntered.addListener(async (text) => {
   } else {
     const response = await fetch("https://goquick.org"); // GoQuick.orgユーザはGoQuick.orgを利用
     const data = await response.text();
-    if (data.match("GoQuick Login")) {
-      window.open(`https://google.com/search?q=${text}`);
-    } else {
-      window.open(`http://goquick.org/${text}`);
-    }
+    browser.tabs.update({
+      url: data.match("GoQuick Login")
+        ? `https://google.com/search?q=${text}`
+        : `http://goquick.org/${text}`,
+    });
   }
 });
