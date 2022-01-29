@@ -1,7 +1,9 @@
-import { createHash } from "https://deno.land/std@0.120.0/hash/mod.ts";
-
-/** 文字列を0〜99のハッシュに変換 */
-export function hash(str: string) {
-  const md5 = createHash("md5");
-  return parseInt(md5.update(str).toString().substring(0, 4), 16) % 100;
+/** 文字列をハッシュに変換 */
+export async function hash(text: string) {
+  const encoded = new TextEncoder().encode(text);
+  const digest = await crypto.subtle.digest("SHA-256", encoded);
+  const hash = Array.from(new Uint8Array(digest)).map((byte) =>
+    byte.toString(16).padStart(2, "0")
+  ).join("");
+  return parseInt(hash, 16) % 100;
 }
