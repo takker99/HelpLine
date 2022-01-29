@@ -10,11 +10,11 @@ import { browser } from "./deps/webextension.ts";
 
 function createStatus() {
   const div = document.createElement("div");
-  div.style.position = "absolute";
+  div.style.position = "fixed";
   div.style.width = "100%";
   div.style.height = "18pt";
-  div.style.top = `${window.innerHeight - 18}px`;
-  div.style.left = "0pt";
+  div.style.bottom = "0px";
+  div.style.left = "0px";
   div.style.backgroundColor = "#ffd";
   div.hidden = true;
 
