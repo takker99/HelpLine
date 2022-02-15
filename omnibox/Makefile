@@ -1,7 +1,7 @@
 js:
-	deno bundle --no-check content_script.ts | deno run --allow-net=registry.npmjs.org --allow-read --allow-write=$HOME/.cache/esbuild --allow-run --allow-env --no-check https://deno.land/x/esbuild@v0.14.11/mod.js --minify --format=iife > content_script.min.js
-	deno bundle --no-check background.ts | deno run --allow-net=registry.npmjs.org --allow-read --allow-write=$HOME/.cache/esbuild --allow-run --allow-env --no-check https://deno.land/x/esbuild@v0.14.11/mod.js --minify --format=iife > background.min.js
-	deno bundle --no-check setting.ts | deno run --allow-net=registry.npmjs.org --allow-read --allow-write=$HOME/.cache/esbuild --allow-run --allow-env --no-check https://deno.land/x/esbuild@v0.14.11/mod.js --minify --format=esm > setting.min.js
+	deno bundle --no-check content_script.ts | deno run --allow-net=registry.npmjs.org --allow-read --allow-write=$$HOME/.cache/esbuild,$$HOME/Library/Caches/esbuild/bin --allow-run --allow-env --no-check https://deno.land/x/esbuild@v0.14.11/mod.js --minify --format=iife > content_script.min.js
+	deno bundle --no-check background.ts | deno run --allow-net=registry.npmjs.org --allow-read --allow-write=$$HOME/.cache/esbuild --allow-run --allow-env --no-check https://deno.land/x/esbuild@v0.14.11/mod.js --minify --format=iife > background.min.js
+	deno bundle --no-check setting.ts | deno run --allow-net=registry.npmjs.org --allow-read --allow-write=$$HOME/.cache/esbuild --allow-run --allow-env --no-check https://deno.land/x/esbuild@v0.14.11/mod.js --minify --format=esm > setting.min.js
 
 
 #
