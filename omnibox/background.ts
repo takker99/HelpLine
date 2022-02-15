@@ -88,7 +88,7 @@ browser.omnibox.onInputEntered.addListener(async (text) => {
     browser.tabs.update({
       url: data.match("GoQuick Login")
         ? `https://google.com/search?q=${text}`
-        : `http://goquick.org/${text}`,
+        : `https://goquick.org/${text}`,
     });
   }
 });
