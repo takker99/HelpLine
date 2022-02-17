@@ -15,6 +15,7 @@ import { Asearch } from "./deps/asearch.ts";
 import { browser } from "./deps/webextension.ts";
 import { ensureTabId } from "./utils.ts";
 import { getData } from "./storage.ts";
+import { isURL } from "./isURL.ts";
 
 //
 // browserActionボタンを押したときcontent_script.jsにメッセージを送る
@@ -80,10 +81,12 @@ function search(
 // ユーザがメニューを選択したとき呼ばれるもの
 //
 browser.omnibox.onInputEntered.addListener(async (text) => {
-  if (text.match(/^http/)) {
+  if (isURL(text)) {
     browser.tabs.update({ url: text });
   } else {
-    const response = await fetch("https://goquick.org", { credentials: "include"}); // GoQuick.orgユーザはGoQuick.orgを利用
+    const response = await fetch("https://goquick.org", {
+      credentials: "include",
+    }); // GoQuick.orgユーザはGoQuick.orgを利用
     const data = await response.text();
     browser.tabs.update({
       url: data.match("GoQuick Login")
