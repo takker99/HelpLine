@@ -31,6 +31,7 @@ const manifest: Record<string, unknown> = {
   permissions: [
     "storage",
     "downloads",
+    "*://goquick.org/*",
   ],
 
   omnibox: { keyword: "/" },
