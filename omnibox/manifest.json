@@ -11,14 +11,14 @@
     {
       "matches": ["<all_urls>"],
       "js": [
-        "content_script.min.js"
+        "content_script.js"
       ],
       "run_at": "document_idle"
     }
   ],
   "background": {
     "scripts": [
-      "background.min.js"
+      "background.js"
     ],
     "persistent": false
   },
